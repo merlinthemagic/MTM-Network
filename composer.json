@@ -1,0 +1,29 @@
+{
+	"name" : "merlinthemagic/mtm-network",
+	"type" : "library",
+	"description" : "Network classes and tools for PHP 7",
+	"version" : "0.0.1",
+	"keywords" : [
+		"ip",
+		"ipv6",
+		"ipv4",
+		"ethernet"
+	],
+	"homepage" : "https://github.com/merlinthemagic/MTM-Network",
+	"license" : "LGPL-3.0",
+	"authors" : [{
+			"name" : "Martin Peter Madsen",
+			"email" : "dev@martinpetermadsen.com",
+			"role" : "Developer"
+		}
+	],
+	"require" : {
+		"php" : ">=7.3.0"
+	},
+	"autoload" : {
+		"files" : [
+			"./Enable.php"
+		]
+	},
+	"minimum-stability" : "dev"
+}
