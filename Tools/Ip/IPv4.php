@@ -31,4 +31,17 @@ class IPv4
 	        return false;
 	    }
 	}
+	public function isIpV4($ipStr)
+	{
+		try {
+			$ipObj	= \MTM\Network\Factories::getIp()->getIpFromString($ipStr);
+			if ($ipObj instanceof \MTM\Network\Models\Ip\V4Address) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (\Exception $e) {
+			return false;
+		}
+	}
 }
