@@ -7,8 +7,7 @@ class V4Address
 	private $_decAddr=null;
 	private $_subnet=null;
 	private $_ifObj=null;
-	private $_toolObj=null;
-	
+
 	public function getVersion()
 	{
 	    return 4;
@@ -110,13 +109,8 @@ class V4Address
 	{
 		return $this->_subnet;
 	}
-	public function setTool($obj)
-	{
-	    $this->_toolObj	= $obj;
-	    return $this;
-	}
 	public function getTool()
 	{
-	    return $this->_toolObj;
+		return \MTM\Network\Factories::getTools()->getIPv4();
 	}
 }

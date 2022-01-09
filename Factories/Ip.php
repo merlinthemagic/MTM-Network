@@ -2,10 +2,9 @@
 //© 2019 Martin Madsen
 namespace MTM\Network\Factories;
 
-class Ip
+class Ip extends Base
 {
 	//USE: $ipObj	= \MTM\Network\Factories::getIp()->getIPv4Address("192.168.8.1", 24);
-	public $_cStore=array();
 	
 	public function getIPv4Address($ipStr=null, $subnet=null)
 	{
@@ -19,9 +18,6 @@ class Ip
 			}
 			$rObj->setSubnet($subnet);
 		}
-		
-		$rObj->setTool($this->getIPv4Tool());
-		
 		return $rObj;
 	}
 	public function getIPv4Subnet($ipStr=null, $cidr=null)
@@ -31,13 +27,6 @@ class Ip
 			$rObj->setFromIpAndCidr($ipStr, $cidr);
 		}
 		return $rObj;
-	}
-	public function getIPv4Tool()
-	{
-		if (array_key_exists(__FUNCTION__, $this->_cStore) === false) {
-			$this->_cStore[__FUNCTION__]	= new \MTM\Network\Tools\Ip\IPv4();
-		}
-		return $this->_cStore[__FUNCTION__];
 	}
 	public function getIpFromString($ipStr)
 	{

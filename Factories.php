@@ -21,4 +21,11 @@ class Factories
 		}
 		return self::$_cStore[__FUNCTION__];
 	}
+	public static function getTools()
+	{
+		if (array_key_exists(__FUNCTION__, self::$_cStore) === false) {
+			self::$_cStore[__FUNCTION__]	= new \MTM\Network\Factories\Tools();
+		}
+		return self::$_cStore[__FUNCTION__];
+	}
 }
