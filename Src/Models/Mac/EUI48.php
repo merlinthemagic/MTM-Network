@@ -1,13 +1,16 @@
 <?php
-//© 2019 Martin Madsen
+//ï¿½ 2019 Martin Madsen
 namespace MTM\Network\Models\Mac;
 
 class EUI48
 {
-	private $_hexAddr=null;
+	protected $_hexAddr=null;
 	
 	public function setFromString($str)
 	{
+		if (is_string($str) === false) {
+			throw new \Exception("Invalid input");
+		}
 	    $str       = trim($str);
 	    $seps	   = trim(preg_replace("/[a-fA-F0-9]+/", "", $str));
 	    $sepLen    = strlen($seps);
@@ -28,7 +31,7 @@ class EUI48
 	    }
 
 		$mac			= preg_replace("/[^a-fA-F0-9]+/", "", $str);
-		if (strlen($mac) == 12) {
+		if (strlen($mac) === 12) {
 			$this->_hexAddr		= strtoupper($mac);
 			return $this;
 		} else {
@@ -37,10 +40,16 @@ class EUI48
 	}
 	public function setFromDecimal($int)
 	{
+		if (is_int($int) === false) {
+			throw new \Exception("Invalid input");
+		}
 		$this->setFromString(dechex($int));
 	}
 	public function getAsString($format=null)
 	{
+		if ($this->_hexAddr === null) {
+			throw new \Exception("No mac address set");
+		}
 		if ($format == "std" || $format === null) {
 			return implode(":", str_split($this->_hexAddr, 2));
 		} elseif ($format == "hex") {
