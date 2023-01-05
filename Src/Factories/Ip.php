@@ -1,5 +1,5 @@
 <?php
-//© 2019 Martin Madsen
+//ï¿½ 2019 Martin Madsen
 namespace MTM\Network\Factories;
 
 class Ip extends Base
@@ -13,8 +13,8 @@ class Ip extends Base
 			$rObj->setFromString($ipStr);
 		}
 		if ($subnet !== null) {
-			if (is_object($subnet) === false) {
-				$subnet	= $this->getIPv4Subnet($ipStr, $subnet);
+			if ($subnet instanceof \MTM\Network\Models\Ip\V4Subnet === false) {
+				$subnet		= $this->getIPv4Subnet($ipStr, $subnet);
 			}
 			$rObj->setSubnet($subnet);
 		}

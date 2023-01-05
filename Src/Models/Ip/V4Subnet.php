@@ -1,35 +1,45 @@
 <?php
-//© 2019 Martin Madsen
+//ï¿½ 2019 Martin Madsen
 namespace MTM\Network\Models\Ip;
 
 class V4Subnet
 {
-	private $_networkAddr=null;
-	private $_bcastAddr=null;
+	private $_network=null;
 	private $_cidr=null;
 	
 	public function setFromIpAndCidr($ipStr, $cidr)
 	{
-		$this->_cidr		= intval($cidr);
-		
-		//TODO: make fall back for ip2long func
-		$intMask 			= ip2long($this->getDecimal());
-		$intIp				= ip2long($ipStr);
-		
-		$this->_networkAddr	= \MTM\Network\Factories::getIp()->getIPv4Address(long2ip($intIp & $intMask));
-		$this->_bcastAddr	= \MTM\Network\Factories::getIp()->getIPv4Address(long2ip($intIp | ~$intMask));	
+		$this->getTool()->isIpV4($ipStr, true);
+		$this->getTool()->isCidr($cidr, true);
+		$this->_network		= long2ip(ip2long($ipStr) & ip2long($this->getTool()->cidrToMask($cidr)));
+		$this->_cidr		= $cidr;
 	}
 	public function getNetwork()
 	{
-		return $this->_networkAddr;
-	}
-	public function getBroadcast()
-	{
-		return $this->_bcastAddr;
+		return $this->_network;
 	}
 	public function getCidr()
 	{
 		return $this->_cidr;
+	}
+	public function getBroadcast()
+	{
+		return long2ip(ip2long($this->_network) | ip2long(long2ip(~ip2long($this->getTool()->cidrToMask($this->_cidr)))));
+	}
+	public function inSubnet($ipStr, $throw=false)
+	{
+		$this->getTool()->isIpV4($ipStr, true);
+		$netInt		= ip2long($this->getNetwork());
+		$ipInt		= ip2long($ipStr);
+		$bcastInt	= ip2long($this->getBroadcast());
+		
+		if ($netInt <= $ipInt && $ipInt <= $bcastInt) {
+			return true;
+		} elseif ($throw === true) {
+			throw new \Exception("IP is not in subnet");
+		} else {
+			return false;
+		}
 	}
 	public function getAsString($format=null)
 	{
@@ -59,5 +69,9 @@ class V4Subnet
 		} else {
 			return null;
 		}
+	}
+	public function getTool()
+	{
+		return \MTM\Network\Factories::getTools()->getIPv4();
 	}
 }

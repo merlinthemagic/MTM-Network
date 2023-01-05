@@ -1,12 +1,11 @@
 <?php
-//© 2019 Martin Madsen
+//ï¿½ 2019 Martin Madsen
 namespace MTM\Network\Models\Ip;
 
 class V4Address
 {
-	private $_decAddr=null;
-	private $_subnet=null;
-	private $_ifObj=null;
+	protected $_ip=null;
+	protected $_subObj=null;
 
 	public function getVersion()
 	{
@@ -14,46 +13,30 @@ class V4Address
 	}
 	public function setFromString($str)
 	{
-		$ip	= preg_replace("/[^\.0-9]+/", "", $str);
-		$this->set($ip);
-		
-		return $this;
-	}
-	public function set($ipStr)
-	{
-		if (preg_match("/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/", $ipStr) == 1) {
-			$this->_decAddr	= $ipStr;
-			$this->_subnet	= null;
-		} elseif (preg_match("/^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\/([0-9]{1,2})$/", $ipStr, $raw) == 1) {
-			$this->_decAddr	= $raw[1];
-			$this->_subnet	= \MTM\Network\Factories::getIp()->getIPv4Subnet($raw[1], $raw[2]);
-		} elseif ($ipStr === null) {
-			$this->_decAddr	= null;
-			$this->_subnet	= null;
-		} else {
-			throw new \Exception("Invalid IP");
+		if (is_string($str) === false) {
+			throw new \Exception("Invalid Input");
 		}
+		$ipStr	= preg_replace("/[^\.0-9\/]+/", "", $str);
 		
+		if (preg_match("/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/", $ipStr) === 1) {
+			$this->_ip		= $ipStr;
+			$this->_subObj	= null;
+		} elseif (preg_match("/^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\/([0-9]{1,2})$/", $ipStr, $raw) == 1) {
+			$this->_ip		= $raw[1];
+			$this->_subObj	= \MTM\Network\Factories::getIp()->getIPv4Subnet($raw[1], $raw[2]);
+		} else {
+			throw new \Exception("Invalid Input");
+		}
+
 		return $this;
 	}
 	public function getDecimal()
 	{
-		//get as decimal notation
-		if ($this->_decAddr !== null) {
-			return $this->_decAddr;
-		} else {
-			return null;
-		}
+		return $this->_ip;
 	}
 	public function getInteger()
 	{
-	    //get as 32 bit integer
-	    $ipDec     = $this->getDecimal();
-	    if ($ipDec != "") {
-	        return ip2long($ipDec);
-	    } else {
-	        return null;
-	    }
+		return ip2long($this->getDecimal());
 	}
 	public function getAsString($format=null, $inclSubnet=null)
 	{
@@ -102,12 +85,12 @@ class V4Address
 	}
 	public function setSubnet($obj)
 	{
-		$this->_subnet	= $obj;
+		$this->_subObj	= $obj;
 		return $this;
 	}
 	public function getSubnet()
 	{
-		return $this->_subnet;
+		return $this->_subObj;
 	}
 	public function getTool()
 	{
