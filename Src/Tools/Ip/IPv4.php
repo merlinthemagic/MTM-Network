@@ -68,4 +68,10 @@ class IPv4
 			throw new \Exception("Not an IpV4 mask");
 		}
 	}
+	public function cidrAddressCount($cidr)
+	{
+		//returns how many addresses a subnet of the cidr size contains
+		$this->isCidr($cidr, true);
+		return (pow(2, 32) / pow(2, $cidr));
+	}
 }
