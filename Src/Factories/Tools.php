@@ -1,5 +1,5 @@
 <?php
-//© 2022 Martin Madsen
+//ï¿½ 2022 Martin Madsen
 namespace MTM\Network\Factories;
 
 class Tools extends Base
@@ -17,6 +17,13 @@ class Tools extends Base
 	{
 		if (array_key_exists(__FUNCTION__, $this->_s) === false) {
 			$this->_s[__FUNCTION__]	= new \MTM\Network\Tools\Mac\EUI48();
+		}
+		return $this->_s[__FUNCTION__];
+	}
+	public function getWLanMCS()
+	{
+		if (array_key_exists(__FUNCTION__, $this->_s) === false) {
+			$this->_s[__FUNCTION__]	= new \MTM\Network\Tools\Wlan\MCS();
 		}
 		return $this->_s[__FUNCTION__];
 	}
